@@ -1,0 +1,1516 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Viridex — The Expertise Doesn't Have to Retire</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #0a0a08;
+    --paper: #f5f2ea;
+    --rust: #c94f1e;
+    --amber: #e8a020;
+    --steel: #3a4a5c;
+    --mist: #dcd8ce;
+    --glow: #ff6b35;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--ink);
+    color: var(--paper);
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 300;
+    overflow-x: hidden;
+    cursor: none;
+  }
+
+  /* Custom cursor */
+  .cursor {
+    width: 12px; height: 12px;
+    background: var(--rust);
+    border-radius: 50%;
+    position: fixed;
+    top: 0; left: 0;
+    pointer-events: none;
+    z-index: 9999;
+    transition: transform 0.15s ease, background 0.2s;
+    transform: translate(-50%, -50%);
+  }
+  .cursor-ring {
+    width: 36px; height: 36px;
+    border: 1px solid rgba(201,79,30,0.5);
+    border-radius: 50%;
+    position: fixed;
+    top: 0; left: 0;
+    pointer-events: none;
+    z-index: 9998;
+    transform: translate(-50%, -50%);
+    transition: transform 0.4s ease, width 0.3s, height 0.3s, border-color 0.2s;
+  }
+
+  /* NAV */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 1.5rem 4rem;
+    mix-blend-mode: normal;
+    background: linear-gradient(to bottom, rgba(10,10,8,0.95) 0%, transparent 100%);
+  }
+  .nav-logo {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 2rem;
+    letter-spacing: 0.12em;
+    color: var(--paper);
+    text-decoration: none;
+  }
+  .nav-logo span { color: var(--rust); }
+  .nav-links {
+    display: flex; gap: 2.5rem; list-style: none;
+  }
+  .nav-links a {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.72rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--mist);
+    text-decoration: none;
+    opacity: 0.7;
+    transition: opacity 0.2s, color 0.2s;
+  }
+  .nav-links a:hover { opacity: 1; color: var(--amber); }
+  .nav-cta {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.72rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    background: var(--rust);
+    color: var(--paper);
+    border: none;
+    padding: 0.7rem 1.5rem;
+    cursor: none;
+    transition: background 0.2s, transform 0.15s;
+  }
+  .nav-cta:hover { background: var(--glow); transform: translateY(-1px); }
+
+  /* HERO */
+  .hero {
+    min-height: 100vh;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero-left {
+    display: flex; flex-direction: column; justify-content: center;
+    padding: 10rem 4rem 6rem 4rem;
+    position: relative; z-index: 2;
+  }
+  .hero-eyebrow {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--rust);
+    margin-bottom: 2rem;
+    display: flex; align-items: center; gap: 1rem;
+  }
+  .hero-eyebrow::before {
+    content: '';
+    display: block; width: 40px; height: 1px; background: var(--rust);
+  }
+  .hero-h1 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(4.5rem, 7vw, 8rem);
+    line-height: 0.92;
+    letter-spacing: 0.02em;
+    margin-bottom: 2rem;
+  }
+  .hero-h1 .accent { color: var(--rust); }
+  .hero-h1 .line2 { color: var(--amber); }
+  .hero-sub {
+    font-size: 1.1rem;
+    line-height: 1.7;
+    color: rgba(245,242,234,0.65);
+    max-width: 480px;
+    margin-bottom: 3rem;
+  }
+  .hero-ctas { display: flex; gap: 1.2rem; align-items: center; }
+  .btn-primary {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.75rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    background: var(--rust);
+    color: var(--paper);
+    padding: 1rem 2rem;
+    border: none; cursor: none;
+    transition: background 0.2s, transform 0.15s;
+    text-decoration: none; display: inline-block;
+  }
+  .btn-primary:hover { background: var(--glow); transform: translateY(-2px); }
+  .btn-ghost {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.75rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    background: transparent;
+    color: var(--mist);
+    padding: 1rem 2rem;
+    border: 1px solid rgba(220,216,206,0.3);
+    cursor: none;
+    transition: border-color 0.2s, color 0.2s;
+    text-decoration: none; display: inline-block;
+  }
+  .btn-ghost:hover { border-color: var(--amber); color: var(--amber); }
+
+  .hero-right {
+    position: relative; overflow: hidden;
+  }
+  .hero-visual {
+    position: absolute; inset: 0;
+    background:
+      radial-gradient(ellipse at 60% 40%, rgba(201,79,30,0.18) 0%, transparent 60%),
+      radial-gradient(ellipse at 30% 70%, rgba(58,74,92,0.4) 0%, transparent 50%);
+  }
+  .hero-grid {
+    position: absolute; inset: 0;
+    background-image:
+      linear-gradient(rgba(245,242,234,0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(245,242,234,0.04) 1px, transparent 1px);
+    background-size: 60px 60px;
+    animation: gridDrift 20s linear infinite;
+  }
+  @keyframes gridDrift {
+    0% { transform: translateY(0); }
+    100% { transform: translateY(60px); }
+  }
+  .hero-device {
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    width: 280px;
+  }
+  .device-frame {
+    background: #1a1a18;
+    border: 2px solid rgba(201,79,30,0.4);
+    border-radius: 24px;
+    padding: 1.5rem;
+    box-shadow: 0 40px 80px rgba(0,0,0,0.6), 0 0 60px rgba(201,79,30,0.15);
+  }
+  .device-notch {
+    width: 80px; height: 6px;
+    background: rgba(245,242,234,0.1);
+    border-radius: 3px;
+    margin: 0 auto 1.5rem;
+  }
+  .device-query {
+    background: rgba(201,79,30,0.12);
+    border: 1px solid rgba(201,79,30,0.3);
+    border-radius: 8px;
+    padding: 0.75rem;
+    margin-bottom: 1rem;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.65rem;
+    color: var(--amber);
+    line-height: 1.5;
+  }
+  .device-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.55rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--rust);
+    margin-bottom: 0.5rem;
+    opacity: 0.7;
+  }
+  .device-response {
+    background: rgba(245,242,234,0.05);
+    border-radius: 8px;
+    padding: 0.75rem;
+    margin-bottom: 0.75rem;
+  }
+  .device-response p {
+    font-size: 0.68rem;
+    line-height: 1.6;
+    color: rgba(245,242,234,0.8);
+    margin-bottom: 0.5rem;
+  }
+  .device-response p:last-child { margin-bottom: 0; }
+  .prob-bar {
+    display: flex; align-items: center; gap: 0.5rem;
+    margin-bottom: 0.4rem;
+  }
+  .prob-bar-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.58rem;
+    color: rgba(245,242,234,0.6);
+    width: 100px; flex-shrink: 0;
+  }
+  .prob-bar-track {
+    flex: 1; height: 4px;
+    background: rgba(245,242,234,0.08);
+    border-radius: 2px; overflow: hidden;
+  }
+  .prob-bar-fill {
+    height: 100%; border-radius: 2px;
+    background: var(--rust);
+    animation: fillIn 1.5s ease forwards;
+  }
+  @keyframes fillIn { from { width: 0; } }
+  .prob-pct {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.58rem;
+    color: var(--amber);
+    width: 28px;
+  }
+  .hero-stats {
+    position: absolute; bottom: 3rem; left: 4rem;
+    display: flex; gap: 3rem;
+  }
+  .stat { }
+  .stat-num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 2.8rem;
+    color: var(--rust);
+    line-height: 1;
+  }
+  .stat-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.62rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: rgba(245,242,234,0.45);
+    margin-top: 0.2rem;
+  }
+
+  /* TICKER */
+  .ticker {
+    background: var(--rust);
+    padding: 0.75rem 0;
+    overflow: hidden;
+    position: relative;
+  }
+  .ticker-inner {
+    display: flex; gap: 3rem;
+    animation: ticker 30s linear infinite;
+    white-space: nowrap;
+    width: max-content;
+  }
+  @keyframes ticker {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+  }
+  .ticker-item {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--paper);
+    opacity: 0.9;
+    display: flex; align-items: center; gap: 1.5rem;
+  }
+  .ticker-dot {
+    width: 5px; height: 5px;
+    background: rgba(245,242,234,0.5);
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  /* SECTION SHARED */
+  section { padding: 8rem 4rem; }
+  .section-tag {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.68rem;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--rust);
+    margin-bottom: 1rem;
+    display: flex; align-items: center; gap: 1rem;
+  }
+  .section-tag::before {
+    content: '';
+    display: block; width: 30px; height: 1px; background: var(--rust);
+  }
+  .section-h2 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(3rem, 5vw, 5.5rem);
+    line-height: 0.92;
+    letter-spacing: 0.02em;
+    margin-bottom: 1.5rem;
+  }
+
+  /* CRISIS SECTION */
+  .crisis {
+    background: var(--paper);
+    color: var(--ink);
+    position: relative;
+    overflow: hidden;
+  }
+  .crisis::before {
+    content: 'CRISIS';
+    position: absolute;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 28vw;
+    color: rgba(10,10,8,0.04);
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+    letter-spacing: 0.05em;
+    white-space: nowrap;
+  }
+  .crisis .section-tag { color: #8b2a00; }
+  .crisis .section-tag::before { background: #8b2a00; }
+  .crisis .section-h2 { color: var(--ink); }
+  .crisis-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+    margin-top: 4rem;
+  }
+  .crisis-left p {
+    font-size: 1.15rem;
+    line-height: 1.8;
+    color: rgba(10,10,8,0.65);
+    margin-bottom: 1.5rem;
+    max-width: 520px;
+  }
+  .crisis-cards {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;
+  }
+  .crisis-card {
+    background: var(--ink);
+    color: var(--paper);
+    padding: 2rem;
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.25s ease;
+  }
+  .crisis-card:hover { transform: translateY(-4px); }
+  .crisis-card::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 3px;
+    background: var(--rust);
+  }
+  .crisis-card-num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 3.5rem;
+    color: var(--rust);
+    line-height: 1;
+    margin-bottom: 0.5rem;
+  }
+  .crisis-card-label {
+    font-size: 0.85rem;
+    line-height: 1.5;
+    color: rgba(245,242,234,0.6);
+  }
+
+  /* HOW IT WORKS */
+  .how {
+    background: #0d0d0b;
+    position: relative;
+  }
+  .how-steps {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0;
+    margin-top: 5rem;
+    border: 1px solid rgba(245,242,234,0.08);
+  }
+  .step {
+    padding: 3rem 2.5rem;
+    border-right: 1px solid rgba(245,242,234,0.08);
+    position: relative;
+    transition: background 0.3s;
+  }
+  .step:last-child { border-right: none; }
+  .step:hover { background: rgba(201,79,30,0.06); }
+  .step-num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 5rem;
+    color: rgba(201,79,30,0.15);
+    line-height: 1;
+    margin-bottom: 1.5rem;
+    transition: color 0.3s;
+  }
+  .step:hover .step-num { color: rgba(201,79,30,0.35); }
+  .step-icon {
+    width: 48px; height: 48px;
+    border: 1px solid rgba(201,79,30,0.4);
+    display: flex; align-items: center; justify-content: center;
+    margin-bottom: 1.5rem;
+    font-size: 1.4rem;
+  }
+  .step-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.8rem;
+    letter-spacing: 0.05em;
+    margin-bottom: 1rem;
+    color: var(--paper);
+  }
+  .step-desc {
+    font-size: 0.9rem;
+    line-height: 1.7;
+    color: rgba(245,242,234,0.5);
+  }
+  .step-methods {
+    margin-top: 1.5rem;
+    display: flex; flex-wrap: wrap; gap: 0.5rem;
+  }
+  .method-tag {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--amber);
+    border: 1px solid rgba(232,160,32,0.3);
+    padding: 0.3rem 0.6rem;
+  }
+
+  /* PROBLEM TABLE */
+  .problems {
+    background: var(--ink);
+    position: relative;
+  }
+  .problems-intro {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 6rem;
+    margin-bottom: 5rem; align-items: end;
+  }
+  .problems-intro p {
+    font-size: 1.05rem;
+    line-height: 1.8;
+    color: rgba(245,242,234,0.55);
+  }
+  .problems-table {
+    border-top: 1px solid rgba(245,242,234,0.1);
+  }
+  .problem-row {
+    display: grid; grid-template-columns: 1fr 1fr;
+    border-bottom: 1px solid rgba(245,242,234,0.06);
+    transition: background 0.2s;
+  }
+  .problem-row:hover { background: rgba(245,242,234,0.02); }
+  .problem-cell {
+    padding: 2rem 2.5rem;
+    border-right: 1px solid rgba(245,242,234,0.06);
+    display: flex; align-items: flex-start; gap: 1rem;
+  }
+  .problem-cell:last-child { border-right: none; }
+  .problem-cell.answer { border-right: none; }
+  .cell-icon {
+    font-size: 1.1rem; flex-shrink: 0; margin-top: 0.1rem;
+  }
+  .cell-text {
+    font-size: 0.9rem;
+    line-height: 1.6;
+    color: rgba(245,242,234,0.55);
+  }
+  .cell-text.bold {
+    color: var(--paper);
+    font-weight: 400;
+  }
+  .problem-header {
+    display: grid; grid-template-columns: 1fr 1fr;
+    border-bottom: 2px solid rgba(201,79,30,0.4);
+    margin-bottom: 0;
+  }
+  .problem-header-cell {
+    padding: 1rem 2.5rem;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--rust);
+    border-right: 1px solid rgba(245,242,234,0.06);
+  }
+  .problem-header-cell:last-child { border-right: none; }
+
+  /* TECH */
+  .tech {
+    background: #0a0a08;
+    position: relative;
+    overflow: hidden;
+  }
+  .tech-bg {
+    position: absolute; inset: 0;
+    background: radial-gradient(ellipse at 80% 50%, rgba(201,79,30,0.08) 0%, transparent 60%);
+    pointer-events: none;
+  }
+  .tech-grid-container {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; align-items: center;
+    margin-top: 4rem;
+  }
+  .tech-layers {
+    display: flex; flex-direction: column; gap: 0;
+    border: 1px solid rgba(245,242,234,0.08);
+  }
+  .tech-layer {
+    padding: 2.5rem;
+    border-bottom: 1px solid rgba(245,242,234,0.08);
+    position: relative; overflow: hidden;
+    transition: background 0.3s;
+    cursor: none;
+  }
+  .tech-layer:last-child { border-bottom: none; }
+  .tech-layer:hover { background: rgba(201,79,30,0.07); }
+  .tech-layer-tag {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--rust);
+    margin-bottom: 0.7rem;
+  }
+  .tech-layer-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.5rem;
+    letter-spacing: 0.05em;
+    margin-bottom: 0.7rem;
+  }
+  .tech-layer-desc {
+    font-size: 0.85rem;
+    line-height: 1.6;
+    color: rgba(245,242,234,0.45);
+  }
+  .tech-visual {
+    position: relative;
+  }
+  .graph-node {
+    position: absolute;
+    border-radius: 50%;
+    border: 1px solid rgba(201,79,30,0.5);
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.55rem;
+    text-align: center;
+    color: rgba(245,242,234,0.7);
+    background: rgba(10,10,8,0.8);
+    animation: pulse 3s ease-in-out infinite;
+  }
+  @keyframes pulse {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(201,79,30,0.2); }
+    50% { box-shadow: 0 0 0 12px rgba(201,79,30,0); }
+  }
+  .graph-container {
+    width: 100%; aspect-ratio: 1;
+    position: relative;
+    max-width: 420px;
+    margin: 0 auto;
+  }
+  svg.graph-svg {
+    position: absolute; inset: 0;
+    width: 100%; height: 100%;
+  }
+
+  /* USERS */
+  .users {
+    background: var(--paper);
+    color: var(--ink);
+  }
+  .users .section-tag { color: #8b2a00; }
+  .users .section-tag::before { background: #8b2a00; }
+  .users .section-h2 { color: var(--ink); }
+  .users-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr);
+    gap: 2rem; margin-top: 4rem;
+  }
+  .user-card {
+    padding: 3rem 2.5rem;
+    border: 1px solid rgba(10,10,8,0.1);
+    position: relative; overflow: hidden;
+    transition: transform 0.25s, border-color 0.25s;
+  }
+  .user-card:hover { transform: translateY(-6px); border-color: var(--rust); }
+  .user-card::before {
+    content: '';
+    position: absolute; top: 0; left: 0; right: 0;
+    height: 4px; background: var(--rust);
+    transform: scaleX(0); transform-origin: left;
+    transition: transform 0.3s ease;
+  }
+  .user-card:hover::before { transform: scaleX(1); }
+  .user-icon { font-size: 2.5rem; margin-bottom: 1.5rem; }
+  .user-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.8rem;
+    letter-spacing: 0.05em;
+    margin-bottom: 0.5rem;
+    color: var(--ink);
+  }
+  .user-sub {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.62rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--rust);
+    margin-bottom: 1.5rem;
+  }
+  .user-desc {
+    font-size: 0.9rem;
+    line-height: 1.7;
+    color: rgba(10,10,8,0.6);
+  }
+
+  /* METRICS */
+  .metrics {
+    background: var(--rust);
+    color: var(--paper);
+    padding: 6rem 4rem;
+  }
+  .metrics-grid {
+    display: grid; grid-template-columns: repeat(4, 1fr);
+    gap: 0;
+    border: 1px solid rgba(245,242,234,0.2);
+  }
+  .metric-item {
+    padding: 3rem 2rem;
+    border-right: 1px solid rgba(245,242,234,0.2);
+    text-align: center;
+    transition: background 0.2s;
+  }
+  .metric-item:last-child { border-right: none; }
+  .metric-item:hover { background: rgba(245,242,234,0.08); }
+  .metric-num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 4.5rem;
+    line-height: 1;
+    color: var(--paper);
+    margin-bottom: 0.5rem;
+  }
+  .metric-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: rgba(245,242,234,0.7);
+    line-height: 1.5;
+  }
+
+  /* TESTIMONIAL / QUOTE */
+  .quote-section {
+    background: #0d0d0b;
+    padding: 8rem 4rem;
+    text-align: center;
+    position: relative; overflow: hidden;
+  }
+  .quote-bg {
+    position: absolute; inset: 0;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 40vw;
+    color: rgba(201,79,30,0.03);
+    display: flex; align-items: center; justify-content: center;
+    pointer-events: none;
+    line-height: 1;
+  }
+  .quote-text {
+    font-family: 'DM Sans', sans-serif;
+    font-size: clamp(1.5rem, 3vw, 2.6rem);
+    font-weight: 300;
+    font-style: italic;
+    line-height: 1.4;
+    color: var(--paper);
+    max-width: 900px;
+    margin: 0 auto 2rem;
+    position: relative; z-index: 1;
+  }
+  .quote-text em { color: var(--amber); font-style: normal; }
+  .quote-source {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: rgba(245,242,234,0.4);
+  }
+
+  /* PRICING */
+  .pricing {
+    background: var(--ink);
+    padding: 8rem 4rem;
+  }
+  .pricing-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr);
+    gap: 2rem; margin-top: 4rem;
+  }
+  .pricing-card {
+    padding: 3rem 2.5rem;
+    border: 1px solid rgba(245,242,234,0.08);
+    position: relative;
+    transition: transform 0.25s, border-color 0.25s;
+  }
+  .pricing-card.featured {
+    border-color: var(--rust);
+    background: rgba(201,79,30,0.06);
+  }
+  .pricing-card:hover { transform: translateY(-4px); border-color: var(--rust); }
+  .pricing-badge {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    background: var(--rust);
+    color: var(--paper);
+    padding: 0.3rem 0.7rem;
+    display: inline-block;
+    margin-bottom: 1.5rem;
+  }
+  .pricing-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 2rem;
+    letter-spacing: 0.05em;
+    margin-bottom: 0.5rem;
+  }
+  .pricing-price {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 3.5rem;
+    color: var(--amber);
+    line-height: 1;
+    margin-bottom: 0.3rem;
+  }
+  .pricing-unit {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.62rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: rgba(245,242,234,0.4);
+    margin-bottom: 2rem;
+  }
+  .pricing-features {
+    list-style: none;
+    margin-bottom: 2.5rem;
+  }
+  .pricing-features li {
+    font-size: 0.88rem;
+    line-height: 1.6;
+    color: rgba(245,242,234,0.55);
+    padding: 0.6rem 0;
+    border-bottom: 1px solid rgba(245,242,234,0.05);
+    display: flex; align-items: flex-start; gap: 0.75rem;
+  }
+  .pricing-features li::before {
+    content: '→';
+    color: var(--rust);
+    flex-shrink: 0;
+  }
+
+  /* FOUNDER */
+  .founder {
+    background: var(--paper);
+    color: var(--ink);
+    padding: 8rem 4rem;
+  }
+  .founder .section-tag { color: #8b2a00; }
+  .founder .section-tag::before { background: #8b2a00; }
+  .founder .section-h2 { color: var(--ink); }
+  .founder-layout {
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 6rem; align-items: center;
+    margin-top: 4rem;
+  }
+  .founder-card {
+    background: var(--ink);
+    color: var(--paper);
+    padding: 3rem;
+    position: relative;
+  }
+  .founder-card::after {
+    content: '';
+    position: absolute;
+    top: 12px; left: 12px;
+    right: -12px; bottom: -12px;
+    border: 1px solid rgba(201,79,30,0.3);
+    z-index: -1;
+  }
+  .founder-avatar {
+    width: 80px; height: 80px;
+    border: 2px solid var(--rust);
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 2.5rem;
+    color: var(--rust);
+    margin-bottom: 1.5rem;
+    background: rgba(201,79,30,0.08);
+  }
+  .founder-name {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 2.5rem;
+    letter-spacing: 0.05em;
+    margin-bottom: 0.3rem;
+  }
+  .founder-role {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--rust);
+    margin-bottom: 2rem;
+  }
+  .founder-bio {
+    font-size: 0.95rem;
+    line-height: 1.8;
+    color: rgba(245,242,234,0.6);
+    margin-bottom: 1.5rem;
+  }
+  .founder-tags {
+    display: flex; flex-wrap: wrap; gap: 0.5rem;
+  }
+  .founder-tag {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.58rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    border: 1px solid rgba(245,242,234,0.15);
+    color: rgba(245,242,234,0.5);
+    padding: 0.3rem 0.65rem;
+  }
+  .founder-right h3 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 2.2rem;
+    letter-spacing: 0.03em;
+    color: var(--ink);
+    margin-bottom: 1.5rem;
+    line-height: 1.1;
+  }
+  .founder-right p {
+    font-size: 1rem;
+    line-height: 1.8;
+    color: rgba(10,10,8,0.6);
+    margin-bottom: 1.2rem;
+  }
+
+  /* CTA SECTION */
+  .cta-section {
+    background: var(--rust);
+    padding: 7rem 4rem;
+    position: relative; overflow: hidden;
+    text-align: center;
+  }
+  .cta-section::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: repeating-linear-gradient(
+      -45deg,
+      rgba(245,242,234,0.03) 0px, rgba(245,242,234,0.03) 1px,
+      transparent 1px, transparent 20px
+    );
+  }
+  .cta-section h2 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(3rem, 6vw, 6rem);
+    line-height: 0.92;
+    letter-spacing: 0.02em;
+    color: var(--paper);
+    margin-bottom: 1.5rem;
+    position: relative; z-index: 1;
+  }
+  .cta-section p {
+    font-size: 1.1rem;
+    color: rgba(245,242,234,0.75);
+    max-width: 540px;
+    margin: 0 auto 3rem;
+    line-height: 1.7;
+    position: relative; z-index: 1;
+  }
+  .cta-buttons {
+    display: flex; gap: 1.2rem; justify-content: center;
+    position: relative; z-index: 1;
+  }
+  .btn-white {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.75rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    background: var(--paper);
+    color: var(--ink);
+    padding: 1rem 2.5rem;
+    border: none; cursor: none;
+    transition: background 0.2s, transform 0.15s;
+    text-decoration: none; display: inline-block;
+  }
+  .btn-white:hover { background: white; transform: translateY(-2px); }
+  .btn-outline-white {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.75rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    background: transparent;
+    color: var(--paper);
+    padding: 1rem 2.5rem;
+    border: 1px solid rgba(245,242,234,0.5);
+    cursor: none;
+    transition: border-color 0.2s, background 0.2s;
+    text-decoration: none; display: inline-block;
+  }
+  .btn-outline-white:hover { border-color: var(--paper); background: rgba(245,242,234,0.1); }
+
+  /* FOOTER */
+  footer {
+    background: #060604;
+    padding: 4rem;
+    display: grid; grid-template-columns: 1fr 1fr 1fr;
+    gap: 4rem; align-items: start;
+    border-top: 1px solid rgba(245,242,234,0.06);
+  }
+  .footer-brand .nav-logo { font-size: 2.5rem; display: block; margin-bottom: 1rem; }
+  .footer-tagline {
+    font-size: 0.88rem;
+    line-height: 1.7;
+    color: rgba(245,242,234,0.35);
+  }
+  .footer-col h4 {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--rust);
+    margin-bottom: 1.5rem;
+  }
+  .footer-col ul { list-style: none; }
+  .footer-col li {
+    font-size: 0.88rem;
+    color: rgba(245,242,234,0.35);
+    margin-bottom: 0.7rem;
+    transition: color 0.2s;
+    cursor: none;
+  }
+  .footer-col li:hover { color: var(--paper); }
+  .footer-bottom {
+    grid-column: 1 / -1;
+    display: flex; justify-content: space-between; align-items: center;
+    padding-top: 2rem;
+    border-top: 1px solid rgba(245,242,234,0.06);
+  }
+  .footer-bottom p {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: rgba(245,242,234,0.25);
+  }
+
+  /* ANIMATIONS */
+  .fade-up {
+    opacity: 0; transform: translateY(30px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+  .fade-up.visible { opacity: 1; transform: translateY(0); }
+
+  /* Scrollbar */
+  ::-webkit-scrollbar { width: 4px; }
+  ::-webkit-scrollbar-track { background: var(--ink); }
+  ::-webkit-scrollbar-thumb { background: var(--rust); }
+</style>
+</head>
+<body>
+
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="nav-logo">VIRID<span>E</span>X</a>
+  <ul class="nav-links">
+    <li><a href="#how">How It Works</a></li>
+    <li><a href="#problems">Problems</a></li>
+    <li><a href="#tech">Technology</a></li>
+    <li><a href="#pricing">Pricing</a></li>
+    <li><a href="#founder">Founder</a></li>
+  </ul>
+  <button class="nav-cta">Request Demo</button>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-left">
+    <div class="hero-eyebrow">Field Intelligence Platform</div>
+    <h1 class="hero-h1">
+      THE EXPERTISE<br>
+      <span class="accent">DOESN'T</span><br>
+      <span class="line2">HAVE TO</span><br>
+      RETIRE.
+    </h1>
+    <p class="hero-sub">Senior HVAC, elevator, and industrial equipment technicians are leaving — taking 30 years of diagnostic mastery with them. Viridex captures that knowledge and delivers it to every junior tech, every job, in real time.</p>
+    <div class="hero-ctas">
+      <a href="#how" class="btn-primary">See How It Works</a>
+      <a href="#problems" class="btn-ghost">The Crisis</a>
+    </div>
+  </div>
+  <div class="hero-right">
+    <div class="hero-visual"></div>
+    <div class="hero-grid"></div>
+    <div class="hero-device">
+      <div class="device-frame">
+        <div class="device-notch"></div>
+        <div class="device-label">Field Query</div>
+        <div class="device-query">Trane RTU-50, short cycling, ambient 96°F. Error code E4. What am I looking at?</div>
+        <div class="device-label">Viridex Diagnostic — 3 Pathways</div>
+        <div class="device-response">
+          <div class="prob-bar">
+            <span class="prob-bar-label">Low refrigerant</span>
+            <div class="prob-bar-track"><div class="prob-bar-fill" style="width:78%; animation-delay:0.2s"></div></div>
+            <span class="prob-pct">78%</span>
+          </div>
+          <div class="prob-bar">
+            <span class="prob-bar-label">TXV restriction</span>
+            <div class="prob-bar-track"><div class="prob-bar-fill" style="width:54%; animation-delay:0.5s"></div></div>
+            <span class="prob-pct">54%</span>
+          </div>
+          <div class="prob-bar">
+            <span class="prob-bar-label">Dirty condenser</span>
+            <div class="prob-bar-track"><div class="prob-bar-fill" style="width:31%; animation-delay:0.8s"></div></div>
+            <span class="prob-pct">31%</span>
+          </div>
+          <p style="margin-top:0.8rem; color:rgba(201,79,30,0.9); font-size:0.6rem; font-family:'Space Mono',monospace;">↗ From 14 captures by senior techs on this model</p>
+        </div>
+      </div>
+    </div>
+    <div class="hero-stats">
+      <div class="stat">
+        <div class="stat-num">40%</div>
+        <div class="stat-label">Trades workforce<br>retiring by 2033</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num">30yr</div>
+        <div class="stat-label">Average tacit<br>knowledge at risk</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num">$800</div>
+        <div class="stat-label">Cost per<br>misdiagnosis</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TICKER -->
+<div class="ticker">
+  <div class="ticker-inner">
+    <span class="ticker-item"><span class="ticker-dot"></span>HVAC Service Contractors</span>
+    <span class="ticker-item"><span class="ticker-dot"></span>Elevator Maintenance Companies</span>
+    <span class="ticker-item"><span class="ticker-dot"></span>Industrial Refrigeration Firms</span>
+    <span class="ticker-item"><span class="ticker-dot"></span>Boiler & Pressure Vessel Service</span>
+    <span class="ticker-item"><span class="ticker-dot"></span>Facilities Management Teams</span>
+    <span class="ticker-item"><span class="ticker-dot"></span>Commercial HVAC Contractors</span>
+    <span class="ticker-item"><span class="ticker-dot"></span>Knowledge Inheritance Platform</span>
+    <span class="ticker-item"><span class="ticker-dot"></span>HVAC Service Contractors</span>
+    <span class="ticker-item"><span class="ticker-dot"></span>Elevator Maintenance Companies</span>
+    <span class="ticker-item"><span class="ticker-dot"></span>Industrial Refrigeration Firms</span>
+    <span class="ticker-item"><span class="ticker-dot"></span>Boiler & Pressure Vessel Service</span>
+    <span class="ticker-item"><span class="ticker-dot"></span>Facilities Management Teams</span>
+    <span class="ticker-item"><span class="ticker-dot"></span>Commercial HVAC Contractors</span>
+    <span class="ticker-item"><span class="ticker-dot"></span>Knowledge Inheritance Platform</span>
+  </div>
+</div>
+
+<!-- CRISIS -->
+<section class="crisis" id="crisis">
+  <div class="section-tag">The Demographic Crisis</div>
+  <h2 class="section-h2">A KNOWLEDGE<br>EXTINCTION EVENT</h2>
+  <div class="crisis-grid">
+    <div class="crisis-left">
+      <p>The trades aren't just facing a labor shortage. They're facing a <strong>knowledge extinction event</strong>. The average skilled HVAC technician is 55 years old. Elevator mechanics and industrial equipment specialists are no different.</p>
+      <p>Within 8–10 years, an estimated 40% of this workforce retires. What leaves with them isn't just labor — it's decades of diagnostic intuition that no operations manual has ever captured.</p>
+      <p>Service contractors are already feeling it. Junior techs are misdiagnosing jobs, escalating tickets, and requiring supervision far longer than any profitable business can afford.</p>
+    </div>
+    <div class="crisis-cards">
+      <div class="crisis-card fade-up">
+        <div class="crisis-card-num">55+</div>
+        <div class="crisis-card-label">Average age of a skilled HVAC technician in the US today</div>
+      </div>
+      <div class="crisis-card fade-up">
+        <div class="crisis-card-num">40%</div>
+        <div class="crisis-card-label">Of the skilled trades workforce retiring within the next decade</div>
+      </div>
+      <div class="crisis-card fade-up">
+        <div class="crisis-card-num">24mo</div>
+        <div class="crisis-card-label">Average ramp time before a junior tech can work independently</div>
+      </div>
+      <div class="crisis-card fade-up">
+        <div class="crisis-card-num">$800</div>
+        <div class="crisis-card-label">Cost to a contractor per misdiagnosis and unnecessary truck roll</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section class="how" id="how">
+  <div class="section-tag">The System</div>
+  <h2 class="section-h2">THREE LAYERS.<br>ONE INTELLIGENCE.</h2>
+  <div class="how-steps">
+    <div class="step fade-up">
+      <div class="step-num">01</div>
+      <div class="step-icon">🎙️</div>
+      <div class="step-title">Capture the Knowledge</div>
+      <p class="step-desc">Senior techs interact through the lowest-friction interfaces possible. Viridex ingests voice narrations, annotated photos, repair logs, and 90-second post-job debriefs — all structured automatically into a diagnostic knowledge graph.</p>
+      <div class="step-methods">
+        <span class="method-tag">Voice Logging</span>
+        <span class="method-tag">Photo Annotation</span>
+        <span class="method-tag">Repair Log Ingestion</span>
+        <span class="method-tag">Post-Job Debrief</span>
+      </div>
+    </div>
+    <div class="step fade-up">
+      <div class="step-num">02</div>
+      <div class="step-icon">🧠</div>
+      <div class="step-title">Structure the Reasoning</div>
+      <p class="step-desc">Raw captures are processed into a proprietary Diagnostic Reasoning Graph — mapping equipment models to failure modes, symptom clusters to diagnostic pathways, and edge cases to the senior techs who've seen them.</p>
+      <div class="step-methods">
+        <span class="method-tag">Reasoning Graph</span>
+        <span class="method-tag">Probability Scoring</span>
+        <span class="method-tag">Equipment Taxonomy</span>
+        <span class="method-tag">Context Weighting</span>
+      </div>
+    </div>
+    <div class="step fade-up">
+      <div class="step-num">03</div>
+      <div class="step-icon">📱</div>
+      <div class="step-title">Serve the Junior Tech</div>
+      <p class="step-desc">Junior techs query Viridex in the field — by voice, photo, or text. They get ranked diagnostic pathways, step-by-step guidance, and pre-populated escalation context. All cached offline before they leave the depot.</p>
+      <div class="step-methods">
+        <span class="method-tag">Conversational AI</span>
+        <span class="method-tag">Visual Match</span>
+        <span class="method-tag">Offline-First</span>
+        <span class="method-tag">Smart Escalation</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROBLEMS TABLE -->
+<section class="problems" id="problems">
+  <div class="problems-intro">
+    <div>
+      <div class="section-tag">Real Problems, Real Answers</div>
+      <h2 class="section-h2">WHAT VIRIDEX<br>ACTUALLY SOLVES</h2>
+    </div>
+    <p>Every problem below costs service contractors real money — per job, per month, per retiring technician. Viridex addresses each one with a specific, built mechanism — not a general AI promise.</p>
+  </div>
+  <div class="problems-table">
+    <div class="problem-header">
+      <div class="problem-header-cell">The Problem</div>
+      <div class="problem-header-cell">Viridex's Answer</div>
+    </div>
+    <div class="problem-row fade-up">
+      <div class="problem-cell"><span class="cell-icon">💀</span><span class="cell-text bold">Senior tech retires, takes 30 years of irreplaceable knowledge with them</span></div>
+      <div class="problem-cell answer"><span class="cell-icon">✓</span><span class="cell-text">Pre-retirement knowledge harvest protocol systematically captures reasoning before exit. Their expertise stays in the system permanently.</span></div>
+    </div>
+    <div class="problem-row fade-up">
+      <div class="problem-cell"><span class="cell-icon">🔧</span><span class="cell-text bold">Junior tech misdiagnoses on the first visit, customer calls back within the week</span></div>
+      <div class="problem-cell answer"><span class="cell-icon">✓</span><span class="cell-text">Real-time diagnostic guidance with probability-ranked pathways reduces first-visit resolution failure dramatically.</span></div>
+    </div>
+    <div class="problem-row fade-up">
+      <div class="problem-cell"><span class="cell-icon">📞</span><span class="cell-text bold">Senior tech spends 30% of their day fielding escalation calls from the field</span></div>
+      <div class="problem-cell answer"><span class="cell-icon">✓</span><span class="cell-text">Viridex pre-populates what the junior should have already ruled out. Escalation call time drops from 20 minutes to 3.</span></div>
+    </div>
+    <div class="problem-row fade-up">
+      <div class="problem-cell"><span class="cell-icon">⏳</span><span class="cell-text bold">New hire ramp time is 18–24 months before independent job capability</span></div>
+      <div class="problem-cell answer"><span class="cell-icon">✓</span><span class="cell-text">AI-guided on-job learning compresses ramp time to 9–12 months. Junior techs learn on every job, not just the supervised ones.</span></div>
+    </div>
+    <div class="problem-row fade-up">
+      <div class="problem-cell"><span class="cell-icon">🗂️</span><span class="cell-text bold">Repair logs exist but are unstructured, unsearchable, and unused</span></div>
+      <div class="problem-cell answer"><span class="cell-icon">✓</span><span class="cell-text">Ingestion pipeline converts legacy service records from ServiceTitan, FieldEdge, and Jobber into queryable knowledge assets.</span></div>
+    </div>
+    <div class="problem-row fade-up">
+      <div class="problem-cell"><span class="cell-icon">🗺️</span><span class="cell-text bold">Knowledge is trapped in one office or region, unavailable to other branches</span></div>
+      <div class="problem-cell answer"><span class="cell-icon">✓</span><span class="cell-text">Captured knowledge is instantly accessible across all branches and geographies. A Sun Belt finding is available to every technician on the network.</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- TECH -->
+<section class="tech" id="tech">
+  <div class="tech-bg"></div>
+  <div class="section-tag">Under The Hood</div>
+  <h2 class="section-h2">THE DIAGNOSTIC<br>REASONING GRAPH</h2>
+  <div class="tech-grid-container">
+    <div class="tech-layers">
+      <div class="tech-layer">
+        <div class="tech-layer-tag">Layer 01 — Capture</div>
+        <div class="tech-layer-title">Knowledge Harvest Engine</div>
+        <p class="tech-layer-desc">Voice-first logging, photo annotation, repair log ingestion, and structured post-job debriefs. Every touchpoint is a capture opportunity. Every senior tech becomes a permanent contributor.</p>
+      </div>
+      <div class="tech-layer">
+        <div class="tech-layer-tag">Layer 02 — Structure</div>
+        <div class="tech-layer-title">Proprietary Reasoning Graph</div>
+        <p class="tech-layer-desc">Not a FAQ. Not a manual digitizer. A probabilistic reasoning network that maps equipment models → failure modes → symptom clusters → diagnostic pathways, with confidence scoring from senior tech validation.</p>
+      </div>
+      <div class="tech-layer">
+        <div class="tech-layer-tag">Layer 03 — Serve</div>
+        <div class="tech-layer-title">Junior Tech Copilot</div>
+        <p class="tech-layer-desc">Conversational job assist, visual component matching, and offline-first delivery. The right answer from the person who's seen this exact failure 100 times — served in under 10 seconds.</p>
+      </div>
+      <div class="tech-layer">
+        <div class="tech-layer-tag">Integrations</div>
+        <div class="tech-layer-title">Your Existing Stack</div>
+        <p class="tech-layer-desc">Native connectors for ServiceTitan, FieldEdge, Jobber, and Salesforce Field Service. Viridex lives inside your existing workflow — not alongside it.</p>
+      </div>
+    </div>
+    <div class="tech-visual">
+      <div class="graph-container">
+        <svg class="graph-svg" viewBox="0 0 420 420" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <!-- Connection lines -->
+          <line x1="210" y1="210" x2="80" y2="100" stroke="rgba(201,79,30,0.25)" stroke-width="1" stroke-dasharray="4 4"/>
+          <line x1="210" y1="210" x2="340" y2="100" stroke="rgba(201,79,30,0.25)" stroke-width="1" stroke-dasharray="4 4"/>
+          <line x1="210" y1="210" x2="60" y2="270" stroke="rgba(201,79,30,0.25)" stroke-width="1" stroke-dasharray="4 4"/>
+          <line x1="210" y1="210" x2="360" y2="270" stroke="rgba(201,79,30,0.25)" stroke-width="1" stroke-dasharray="4 4"/>
+          <line x1="210" y1="210" x2="150" y2="360" stroke="rgba(201,79,30,0.25)" stroke-width="1" stroke-dasharray="4 4"/>
+          <line x1="210" y1="210" x2="270" y2="360" stroke="rgba(201,79,30,0.25)" stroke-width="1" stroke-dasharray="4 4"/>
+          <line x1="80" y1="100" x2="340" y2="100" stroke="rgba(245,242,234,0.06)" stroke-width="1"/>
+          <line x1="60" y1="270" x2="150" y2="360" stroke="rgba(245,242,234,0.06)" stroke-width="1"/>
+          <line x1="360" y1="270" x2="270" y2="360" stroke="rgba(245,242,234,0.06)" stroke-width="1"/>
+          <!-- Central node -->
+          <circle cx="210" cy="210" r="52" fill="rgba(201,79,30,0.12)" stroke="rgba(201,79,30,0.6)" stroke-width="1.5"/>
+          <circle cx="210" cy="210" r="36" fill="rgba(201,79,30,0.18)" stroke="rgba(201,79,30,0.4)" stroke-width="1"/>
+          <!-- Outer nodes -->
+          <circle cx="80" cy="100" r="28" fill="rgba(10,10,8,0.9)" stroke="rgba(245,242,234,0.15)" stroke-width="1"/>
+          <circle cx="340" cy="100" r="28" fill="rgba(10,10,8,0.9)" stroke="rgba(245,242,234,0.15)" stroke-width="1"/>
+          <circle cx="60" cy="270" r="28" fill="rgba(10,10,8,0.9)" stroke="rgba(245,242,234,0.15)" stroke-width="1"/>
+          <circle cx="360" cy="270" r="28" fill="rgba(10,10,8,0.9)" stroke="rgba(245,242,234,0.15)" stroke-width="1"/>
+          <circle cx="150" cy="360" r="28" fill="rgba(10,10,8,0.9)" stroke="rgba(245,242,234,0.15)" stroke-width="1"/>
+          <circle cx="270" cy="360" r="28" fill="rgba(10,10,8,0.9)" stroke="rgba(245,242,234,0.15)" stroke-width="1"/>
+          <!-- Labels -->
+          <text x="210" y="204" text-anchor="middle" fill="rgba(201,79,30,0.9)" font-family="'Bebas Neue', sans-serif" font-size="11" letter-spacing="1">DIAGNOSTIC</text>
+          <text x="210" y="220" text-anchor="middle" fill="rgba(201,79,30,0.9)" font-family="'Bebas Neue', sans-serif" font-size="11" letter-spacing="1">REASONING</text>
+          <text x="80" y="97" text-anchor="middle" fill="rgba(245,242,234,0.55)" font-family="Space Mono" font-size="7">HVAC</text>
+          <text x="80" y="108" text-anchor="middle" fill="rgba(245,242,234,0.55)" font-family="Space Mono" font-size="7">Models</text>
+          <text x="340" y="97" text-anchor="middle" fill="rgba(245,242,234,0.55)" font-family="Space Mono" font-size="7">Failure</text>
+          <text x="340" y="108" text-anchor="middle" fill="rgba(245,242,234,0.55)" font-family="Space Mono" font-size="7">Modes</text>
+          <text x="60" y="267" text-anchor="middle" fill="rgba(245,242,234,0.55)" font-family="Space Mono" font-size="7">Symptom</text>
+          <text x="60" y="278" text-anchor="middle" fill="rgba(245,242,234,0.55)" font-family="Space Mono" font-size="7">Clusters</text>
+          <text x="360" y="267" text-anchor="middle" fill="rgba(245,242,234,0.55)" font-family="Space Mono" font-size="7">Senior</text>
+          <text x="360" y="278" text-anchor="middle" fill="rgba(245,242,234,0.55)" font-family="Space Mono" font-size="7">Captures</text>
+          <text x="150" y="357" text-anchor="middle" fill="rgba(245,242,234,0.55)" font-family="Space Mono" font-size="7">Edge</text>
+          <text x="150" y="368" text-anchor="middle" fill="rgba(245,242,234,0.55)" font-family="Space Mono" font-size="7">Cases</text>
+          <text x="270" y="357" text-anchor="middle" fill="rgba(245,242,234,0.55)" font-family="Space Mono" font-size="7">Repair</text>
+          <text x="270" y="368" text-anchor="middle" fill="rgba(245,242,234,0.55)" font-family="Space Mono" font-size="7">Logs</text>
+        </svg>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- USERS -->
+<section class="users" id="users">
+  <div class="section-tag">Who It's For</div>
+  <h2 class="section-h2">THREE USERS.<br>ONE SYSTEM.</h2>
+  <div class="users-grid">
+    <div class="user-card fade-up">
+      <div class="user-icon">🏗️</div>
+      <div class="user-title">Service Contractors</div>
+      <div class="user-sub">Primary Buyer · 50–500 Technicians</div>
+      <p class="user-desc">HVAC service companies, elevator maintenance firms, industrial refrigeration contractors. Running on 8–15% margins where a single misdiagnosis costs $800. They have 3–5 senior techs carrying the intellectual weight of the entire operation — and they know it.</p>
+    </div>
+    <div class="user-card fade-up">
+      <div class="user-icon">🔩</div>
+      <div class="user-title">Junior Techs</div>
+      <div class="user-sub">Primary User · 0–7 Years Experience</div>
+      <p class="user-desc">They don't want to call the senior tech for every ambiguous job. They want to look competent. Viridex gives them a trusted second opinion that fits in their pocket — ranked diagnostic guidance sourced from the people who've seen it all.</p>
+    </div>
+    <div class="user-card fade-up">
+      <div class="user-icon">🎓</div>
+      <div class="user-title">Senior Technicians</div>
+      <div class="user-sub">Knowledge Contributor · Legacy Builders</div>
+      <p class="user-desc">Not surveillance. Legacy building. Their expertise outlives their tenure. Positioned as master craftspeople whose knowledge becomes the company's permanent intellectual asset — recognized, preserved, and deployed long after they clock out for the last time.</p>
+    </div>
+  </div>
+</section>
+
+<!-- METRICS -->
+<div class="metrics">
+  <div class="metrics-grid">
+    <div class="metric-item">
+      <div class="metric-num">9mo</div>
+      <div class="metric-label">Junior tech ramp<br>time with Viridex</div>
+    </div>
+    <div class="metric-item">
+      <div class="metric-num">3min</div>
+      <div class="metric-label">Average escalation<br>call with Viridex</div>
+    </div>
+    <div class="metric-item">
+      <div class="metric-num">$800</div>
+      <div class="metric-label">Saved per<br>prevented misdiagnosis</div>
+    </div>
+    <div class="metric-item">
+      <div class="metric-num">∞</div>
+      <div class="metric-label">Senior tech's<br>knowledge lifespan</div>
+    </div>
+  </div>
+</div>
+
+<!-- QUOTE -->
+<section class="quote-section">
+  <div class="quote-bg">"</div>
+  <p class="quote-text">"That rattling on a Carrier 50XC at startup — that's not the compressor. That's the TXV sluggish in cold weather. Took me <em>eight years</em> to learn that. Now every junior on the team knows it before their first winter season."</p>
+  <p class="quote-source">Master HVAC Technician · 34 Years Field Experience · Viridex Knowledge Contributor</p>
+</section>
+
+<!-- PRICING -->
+<section class="pricing" id="pricing">
+  <div class="section-tag">How We Price</div>
+  <h2 class="section-h2">SCALE YOUR<br>EXPERTISE.</h2>
+  <div class="pricing-grid">
+    <div class="pricing-card fade-up">
+      <div class="pricing-badge">Starter</div>
+      <div class="pricing-title">Growth</div>
+      <div class="pricing-price">$79</div>
+      <div class="pricing-unit">Per technician / month</div>
+      <ul class="pricing-features">
+        <li>Up to 25 technician seats</li>
+        <li>Voice & photo capture</li>
+        <li>Mobile field app (offline-first)</li>
+        <li>ServiceTitan integration</li>
+        <li>Standard diagnostic graph</li>
+        <li>Email support</li>
+      </ul>
+      <a href="#" class="btn-ghost" style="width:100%; text-align:center;">Get Started</a>
+    </div>
+    <div class="pricing-card featured fade-up">
+      <div class="pricing-badge">Most Popular</div>
+      <div class="pricing-title">Professional</div>
+      <div class="pricing-price">$99</div>
+      <div class="pricing-unit">Per technician / month</div>
+      <ul class="pricing-features">
+        <li>Up to 150 technician seats</li>
+        <li>Full capture suite + debrief AI</li>
+        <li>Custom reasoning graph per equipment mix</li>
+        <li>All major FSM integrations</li>
+        <li>Knowledge Harvest onboarding</li>
+        <li>Branch-level knowledge sharing</li>
+        <li>Priority support</li>
+      </ul>
+      <a href="#" class="btn-primary" style="width:100%; text-align:center;">Request Demo</a>
+    </div>
+    <div class="pricing-card fade-up">
+      <div class="pricing-badge">Enterprise</div>
+      <div class="pricing-title">Scale</div>
+      <div class="pricing-price">$120</div>
+      <div class="pricing-unit">Per technician / month</div>
+      <ul class="pricing-features">
+        <li>Unlimited technician seats</li>
+        <li>OEM equipment model database access</li>
+        <li>Multi-branch & multi-region deployment</li>
+        <li>Custom ERP / CMMS connectors</li>
+        <li>Dedicated knowledge harvest team</li>
+        <li>SLA-backed uptime</li>
+        <li>White-glove onboarding</li>
+      </ul>
+      <a href="#" class="btn-ghost" style="width:100%; text-align:center;">Contact Sales</a>
+    </div>
+  </div>
+</section>
+
+<!-- FOUNDER -->
+<section class="founder" id="founder">
+  <div class="section-tag">The Team</div>
+  <h2 class="section-h2">BUILT BY SOMEONE<br>WHO UNDERSTANDS<br>THE TRADES.</h2>
+  <div class="founder-layout">
+    <div class="founder-card">
+      <div class="founder-avatar">PM</div>
+      <div class="founder-name">Pratyush Mhatre</div>
+      <div class="founder-role">Founder & CEO, Viridex</div>
+      <p class="founder-bio">Pratyush built Viridex to solve one of the most underappreciated crises in skilled trades — the silent, systematic loss of expert knowledge as a generation of master technicians retires. With a background spanning industrial operations, AI systems, and field services, he saw firsthand how valuable tacit knowledge was evaporating from companies that had no infrastructure to preserve it.</p>
+      <p class="founder-bio">Viridex is his answer to that crisis: a knowledge operating system that captures the diagnostic genius of veteran technicians and makes it permanently available to every junior tech in the field.</p>
+      <div class="founder-tags">
+        <span class="founder-tag">Industrial AI</span>
+        <span class="founder-tag">Field Services</span>
+        <span class="founder-tag">Knowledge Systems</span>
+        <span class="founder-tag">Skilled Trades</span>
+      </div>
+    </div>
+    <div class="founder-right">
+      <h3>Why This Problem. Why Now.</h3>
+      <p>The skilled trades have been overlooked by enterprise software for decades. Most field service tools optimize for dispatch and billing — not for what actually makes a contractor profitable: the diagnostic capability of their technicians.</p>
+      <p>The retirement wave is already underway. Companies that move now to capture their senior technicians' knowledge before they leave will have a structural, permanent advantage over those that don't.</p>
+      <p>Viridex isn't a training platform or a manual digitizer. It's a <strong>knowledge inheritance infrastructure</strong> — and the companies that adopt it first will compound their advantage with every new capture, every new job, and every new technician onboarded into the system.</p>
+      <a href="#" class="btn-primary" style="margin-top:1.5rem; display:inline-block;">Talk to Pratyush →</a>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section">
+  <h2>YOUR BEST TECH'S KNOWLEDGE.<br>EVERY JOB. EVERY JUNIOR.</h2>
+  <p>Stop losing institutional knowledge every time someone retires. Start your knowledge harvest today — before the next retirement takes another 30 years with it.</p>
+  <div class="cta-buttons">
+    <a href="#" class="btn-white">Request a Demo</a>
+    <a href="#" class="btn-outline-white">Talk to Sales</a>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-brand">
+    <a href="#" class="nav-logo">VIRID<span>E</span>X</a>
+    <p class="footer-tagline">The Knowledge Inheritance Platform for Skilled Trades. Every junior tech performs like they've got your best senior in their ear.</p>
+  </div>
+  <div class="footer-col">
+    <h4>Product</h4>
+    <ul>
+      <li>How It Works</li>
+      <li>Knowledge Harvest</li>
+      <li>Field Copilot</li>
+      <li>Integrations</li>
+      <li>Security</li>
+    </ul>
+  </div>
+  <div class="footer-col">
+    <h4>Company</h4>
+    <ul>
+      <li>About Viridex</li>
+      <li>Pratyush Mhatre</li>
+      <li>Careers</li>
+      <li>Press</li>
+      <li>Contact</li>
+    </ul>
+  </div>
+  <div class="footer-bottom">
+    <p>© 2025 Viridex. All rights reserved.</p>
+    <p>The expertise doesn't have to retire.</p>
+  </div>
+</footer>
+
+<script>
+  // Custom cursor
+  const cursor = document.getElementById('cursor');
+  const ring = document.getElementById('cursorRing');
+  let mx = 0, my = 0, rx = 0, ry = 0;
+  document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; });
+  function animateCursor() {
+    cursor.style.left = mx + 'px'; cursor.style.top = my + 'px';
+    rx += (mx - rx) * 0.12; ry += (my - ry) *.12;
+    ring.style.left = rx + 'px'; ring.style.top = ry + 'px';
+    requestAnimationFrame(animateCursor);
+  }
+  animateCursor();
+  document.querySelectorAll('a, button, .step, .crisis-card, .user-card, .pricing-card, .tech-layer').forEach(el => {
+    el.addEventListener('mouseenter', () => { cursor.style.transform = 'translate(-50%,-50%) scale(2.5)'; ring.style.width = '60px'; ring.style.height = '60px'; ring.style.borderColor = 'rgba(201,79,30,0.8)'; });
+    el.addEventListener('mouseleave', () => { cursor.style.transform = 'translate(-50%,-50%) scale(1)'; ring.style.width = '36px'; ring.style.height = '36px'; ring.style.borderColor = 'rgba(201,79,30,0.5)'; });
+  });
+
+  // Scroll reveal
+  const faders = document.querySelectorAll('.fade-up');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry, i) => {
+      if (entry.isIntersecting) {
+        setTimeout(() => entry.target.classList.add('visible'), i * 80);
+      }
+    });
+  }, { threshold: 0.1 });
+  faders.forEach(el => observer.observe(el));
+
+  // Nav scroll behavior
+  window.addEventListener('scroll', () => {
+    const nav = document.querySelector('nav');
+    nav.style.background = window.scrollY > 60
+      ? 'rgba(10,10,8,0.97)'
+      : 'linear-gradient(to bottom, rgba(10,10,8,0.95) 0%, transparent 100%)';
+  });
+</script>
+</body>
+</html>
